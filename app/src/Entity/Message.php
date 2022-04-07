@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +24,27 @@ class Message
      */
     private $content;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Contact::class, inversedBy="messages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $processed = false;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
+
+    public function __construct()
+    {
+        $this->date = new DateTime('now', new DateTimeZone('Europe/Paris'));
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,5 +60,52 @@ class Message
         $this->content = $content;
 
         return $this;
+    }
+
+    public function getAuthor(): ?Contact
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?Contact $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getProcessed(): ?bool
+    {
+        return $this->processed;
+    }
+
+    public function setProcessed(bool $processed): self
+    {
+        $this->processed = $processed;
+
+        return $this;
+    }
+
+    
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+    
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+        
+        return $this;
+    }
+    
+    public function tojson(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->author->getName(),
+            'mail' => $this->author->getMail(),
+            'content' => $this->content
+        ];
     }
 }

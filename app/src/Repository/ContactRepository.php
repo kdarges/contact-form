@@ -48,6 +48,19 @@ class ContactRepository extends ServiceEntityRepository
     // /**
     //  * @return Contact[] Returns an array of Contact objects
     //  */
+    public function findAll()
+    {
+        return $this->createQueryBuilder('req')
+        ->orderBy('req.id', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+
+    
+
+    // /**
+    //  * @return Contact[] Returns an array of Contact objects
+    //  */
     /*
     public function findByExampleField($value)
     {

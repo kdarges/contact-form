@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Back-office{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+        <div class="row">
+		    <h1 class="text-center my-4">Demandes</h1>
+            <div>
+                <a href="/logout" class="float-end">Déconnexion</a>
+            </div>
+        </div>
+
+		{% for annonce in contact %}
+            <ul class="list-group mb-3">
+                <li class="list-group-item" style="background-color: #f0eeee">
+                    <b>Nom :</b> {{ annonce.name }} - <b>Adresse mail :</b> {{ annonce.mail }} 
+                </li>
+                {% for message in annonce.messages %}
+                    <li class="list-group-item{% if message.processed %} processed{% endif %}">
+                        <input class="form-check-input me-1" type="checkbox" data-id="{{ message.id }}" {% if message.processed %}checked{% endif %}>
+                        {{ message.content }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+	</div>
+
+
+    <script>
+        // AJAX request
+        const check = document.querySelectorAll('input').forEach(item => {
+            item.addEventListener('click', async () => {
+                const data = new FormData();
+                data.append('id', item.dataset.id);
+                const req = await fetch('{{ absolute_url(path('admin_process_message')) }}', {
+                    method: 'POST',
+                    body: data
+                });
+                // toggle background-color
+                item.parentNode.classList.toggle("processed")
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,20 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Contact{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="container">
+    <h1 class="text-center my-4">Formulaire de contact</h1>
+    
+    {% if success %}
+            <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/app/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/app/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
+    {{ form_start(form) }}
+        {{ form_row(form.author.name) }}
+        {{ form_row(form.author.mail) }}
+        {{ form_row(form.content) }}
+        <button type="submit" class="btn btn-dark my-4">Envoyer</button>
+    {{ form_end(form) }}
+
+
+    <a href="/admin">back-office</a>
 </div>
 {% endblock %}
